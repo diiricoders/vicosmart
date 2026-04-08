@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Vico Smart | GSM Alarm & Gate Controller - Official APK</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      min-height: 100vh;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+
+    /* Dynamic animated background */
+    .animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background: linear-gradient(145deg, #f1f5f9 0%, #eef2ff 100%);
+    }
+    .animated-bg::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 30%, rgba(79,70,229,0.12) 0%, transparent 60%);
+      animation: floatOrb 12s infinite alternate ease-in-out;
+    }
+    .animated-bg::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 80% 70%, rgba(168,85,247,0.1) 0%, transparent 60%);
+      animation: floatOrbReverse 15s infinite alternate ease-in-out;
+    }
+    @keyframes floatOrb {
+      0% { opacity: 0.2; transform: translate(0, 0) scale(1);}
+      100% { opacity: 0.7; transform: translate(5%, 5%) scale(1.3);}
+    }
+    @keyframes floatOrbReverse {
+      0% { opacity: 0.15; transform: translate(0, 0) scale(1);}
+      100% { opacity: 0.6; transform: translate(-5%, -5%) scale(1.4);}
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1.2rem 2rem 3rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Glassmorphic navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(20px);
+      border-radius: 100px;
+      padding: 0.7rem 1.8rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.03);
+      border: 1px solid rgba(255,255,255,0.8);
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+    .navbar:hover {
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 12px 40px rgba(79,70,229,0.08);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .logo-icon {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      width: 46px;
+      height: 46px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 20px -8px rgba(79,70,229,0.35);
+      transition: all 0.3s ease;
+    }
+    .logo-icon:hover {
+      transform: rotate(5deg) scale(1.08);
+    }
+    .logo-icon i { font-size: 26px; color: white; }
+    .logo-text { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
+    .logo-text span:first-child { color: #ef4444; }
+    .logo-text span:last-child { color: #4f46e5; }
+    .badge-version {
+      background: rgba(79,70,229,0.12);
+      backdrop-filter: blur(4px);
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      border: 1px solid rgba(79,70,229,0.2);
+      transition: all 0.2s;
+    }
+    .badge-version:hover {
+      background: rgba(79,70,229,0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 3rem;
+      margin: 2rem 0 3rem;
+    }
+    .hero-left {
+      flex: 1;
+      animation: fadeSlideUp 0.8s ease;
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-badge {
+      background: linear-gradient(90deg, #e0e7ff, #c7d2fe);
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 60px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #4f46e5;
+      margin-bottom: 1.2rem;
+    }
+    .hero-left h1 {
+      font-size: 3.4rem;
+      font-weight: 800;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #0f172a 0%, #4f46e5 70%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1.2rem;
+    }
+    .hero-left p {
+      font-size: 1.05rem;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      max-width: 90%;
+    }
+    .feature-tags {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .feature-tag {
+      background: white;
+      border-radius: 40px;
+      padding: 8px 18px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s;
+      cursor: default;
+    }
+    .feature-tag:hover {
+      transform: translateY(-3px);
+      border-color: #4f46e5;
+      box-shadow: 0 8px 20px rgba(79,70,229,0.15);
+    }
+
+    /* Phone Gallery - Reactive Cards */
+    .phone-gallery {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .app-card {
+      background: #1e293b;
+      border-radius: 42px;
+      padding: 14px 10px;
+      width: 210px;
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      box-shadow: 0 30px 40px -20px rgba(0,0,0,0.3);
+      cursor: pointer;
+    }
+    .app-card:hover {
+      transform: translateY(-15px) scale(1.02);
+      box-shadow: 0 35px 50px -18px rgba(79,70,229,0.5);
+    }
+    .app-screen-img {
+      background: #0f172a;
+      border-radius: 28px;
+      padding: 10px;
+      overflow: hidden;
+    }
+    .screenshot-img {
+      width: 100%;
+      border-radius: 20px;
+      height: auto;
+      min-height: 200px;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .app-card:hover .screenshot-img {
+      transform: scale(1.02);
+    }
+    .app-card h5 { color: white; text-align: center; margin-top: 12px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.5px;}
+
+    /* Download Card Premium with reactive states */
+    .download-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(255,255,255,0.92));
+      backdrop-filter: blur(12px);
+      border-radius: 56px;
+      padding: 2rem 2.2rem;
+      margin: 2rem 0;
+      box-shadow: 0 25px 45px -18px rgba(79,70,229,0.25);
+      border: 1px solid rgba(255,255,255,0.7);
+      transition: all 0.3s;
+    }
+    .download-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 30px 55px -18px rgba(79,70,229,0.4);
+    }
+    .apk-btn {
+      background: linear-gradient(105deg, #4f46e5, #7c3aed);
+      border: none;
+      padding: 18px 48px;
+      border-radius: 80px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 12px 28px -8px rgba(79,70,229,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    .apk-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    .apk-btn:active::before {
+      width: 300px;
+      height: 300px;
+    }
+    .apk-btn:hover { transform: scale(1.02); background: linear-gradient(105deg, #4338ca, #6d28d9); letter-spacing: 0.3px; }
+    .apk-btn:active { transform: scale(0.98); }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+    .feature {
+      background: white;
+      border-radius: 36px;
+      padding: 1.8rem;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+      border: 1px solid #f1f5f9;
+      cursor: pointer;
+    }
+    .feature:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 35px -12px rgba(79,70,229,0.25);
+      border-color: #e0e7ff;
+    }
+    .feature i { font-size: 2.2rem; background: linear-gradient(145deg, #4f46e5, #a855f7); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 1rem; display: inline-block; transition: transform 0.2s;}
+    .feature:hover i { transform: scale(1.1); }
+
+    /* Support Section */
+    .support-card {
+      background: linear-gradient(115deg, #ffffff, #fefce8);
+      border-radius: 48px;
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .support-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 40px -15px rgba(79,70,229,0.15);
+    }
+    .support-link {
+      color: #4f46e5;
+      font-weight: 600;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .support-link:hover {
+      transform: translateY(-2px);
+      color: #7c3aed;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 4rem;
+      padding: 2rem 0;
+      border-top: 1px solid #e2e8f0;
+    }
+    .footer p {
+      transition: opacity 0.2s;
+    }
+
+    @media (max-width: 780px) {
+      .container { padding: 1rem; }
+      .hero-left h1 { font-size: 2.2rem; }
+      .apk-btn { padding: 14px 28px; font-size: 1rem; }
+    }
+
+    /* Pulse animation for download button */
+    .pulse-glow {
+      animation: pulseRing 1.8s infinite;
+    }
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(79,70,229,0.4); }
+      70% { box-shadow: 0 0 0 14px rgba(79,70,229,0); }
+      100% { box-shadow: 0 0 0 0 rgba(79,70,229,0); }
+    }
+
+    /* Floating animation for app icon */
+    @keyframes gentleFloat {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+    .floating-icon {
+      animation: gentleFloat 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+<div class="animated-bg"></div>
+<div class="container">
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo" id="logoClick">
+      <div class="logo-icon"><i class="fas fa-microchip"></i></div>
+      <div class="logo-text"><span>VICO</span><span>SMART</span></div>
+    </div>
+    <div class="badge-version"><i class="fas fa-android"></i> v3.2 • GSM Controller</div>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-badge"><i class="fas fa-bolt"></i> Professional GSM Security</div>
+      <h1>Control Gates & Alarms <br>via SMS, Anywhere</h1>
+      <p>Vico Smart transforms your Android into a powerful remote controller. ARM/DISARM, manage zones, open gates, and receive instant SMS replies — no internet needed.</p>
+      <div class="feature-tags">
+        <span class="feature-tag"><i class="fas fa-shield-alt"></i> PIN Protected</span>
+        <span class="feature-tag"><i class="fas fa-sms"></i> SMS Commands</span>
+        <span class="feature-tag"><i class="fas fa-chart-line"></i> Real-time Inbox</span>
+      </div>
+    </div>
+    <div class="phone-gallery">
+      <div class="app-card" data-screen="1">
+        <div class="app-screen-img">
+          <img src="img/screenshot1.png" alt="Dashboard" class="screenshot-img" onerror="this.src='https://placehold.co/200x380?text=Screen+1&bg=1e293b&textColor=white';">
+        </div>
+        <h5>⚡ CONTROL DASHBOARD</h5>
+      </div>
+      <div class="app-card" data-screen="2">
+        <div class="app-screen-img">
+          <img src="img/screenshot2.png" alt="Gate Panel" class="screenshot-img" onerror="this.src='https://placehold.co/200x380?text=Screen+2&bg=1e293b&textColor=white';">
+        </div>
+        <h5>🚪 GATE & ALARM MODES</h5>
+      </div>
+      <div class="app-card" data-screen="3">
+        <div class="app-screen-img">
+          <img src="img/screenshot3.png" alt="Settings" class="screenshot-img" onerror="this.src='https://placehold.co/200x380?text=Screen+3&bg=1e293b&textColor=white';">
+        </div>
+        <h5>⚙️ ZONE SETTINGS</h5>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Icon Highlight with floating animation -->
+  <div style="display: flex; justify-content: center; margin: 1rem 0 0.5rem;">
+    <div style="background: rgba(255,255,255,0.6); backdrop-filter: blur(12px); border-radius: 80px; padding: 0.6rem 2rem; display: inline-flex; align-items: center; gap: 15px; transition: all 0.3s; cursor: pointer;" id="iconCard" class="floating-icon">
+      <img src="img/appicon.png" alt="App Icon" style="width: 52px; height: 52px; border-radius: 18px; transition: transform 0.2s;" onerror="this.src='https://placehold.co/52x52?text=VICO&bg=4f46e5&textColor=white';">
+      <span><strong>Vico Smart</strong> — Premium Security App</span>
+    </div>
+  </div>
+
+  <!-- DOWNLOAD CARD -->
+  <div class="download-card" id="downloadSection">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem;">
+      <div>
+        <h2 style="font-size: 1.9rem;"><i class="fab fa-android"></i> Download APK</h2>
+        <p style="margin-top: 6px;">Version 3.2.0 • 21 MB • Android 8+</p>
+        <div style="display: flex; gap: 12px; margin-top: 12px;">
+          <span><i class="fas fa-check-circle" style="color:#10b981;"></i> Safe & Verified</span>
+          <span><i class="fas fa-shield-alt"></i> No Tracking</span>
+        </div>
+      </div>
+      <button class="apk-btn pulse-glow" id="downloadApkBtn">
+        <i class="fas fa-download"></i> INSTALL APP
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Features Grid -->
+  <h2 style="text-align: center; font-size: 2rem; font-weight: 700; margin: 3rem 0 0.5rem;">Powerful Features</h2>
+  <div class="features-grid">
+    <div class="feature">
+      <i class="fas fa-microchip"></i>
+      <h3>Multi-Device Support</h3>
+      <p>Gate, 3-zone & 8-zone alarms. Manage unlimited devices from one dashboard.</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-sms"></i>
+      <h3>SMS Command Center</h3>
+      <p>ARM, DISARM, OPEN, CLOSE, Panic, Zone toggle — instant execution with replies.</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-history"></i>
+      <h3>Message Inbox</h3>
+      <p>Keep full logs per device, view status replies and message history.</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-palette"></i>
+      <h3>Dark/Light UI</h3>
+      <p>Modern Material Design, theme toggle, and auto-lock security PIN.</p>
+    </div>
+  </div>
+
+  <!-- Support Section -->
+  <div class="support-card" id="supportCard">
+    <i class="fas fa-headset" style="font-size: 2rem; color:#4f46e5;"></i>
+    <h3 style="margin: 0.5rem 0;">24/7 Customer Support</h3>
+    <p>We're here to help with installation and technical questions.</p>
+    <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1.5rem; flex-wrap: wrap;">
+      <a href="#" class="support-link" data-contact="phone"><i class="fas fa-phone-alt"></i> +256 704 790570</a>
+      <a href="#" class="support-link" data-contact="email"><i class="fas fa-envelope"></i> support@vicosmart.com</a>
+      <a href="#" class="support-link" data-contact="whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp Support</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>© 2025 Vico Smart — GSM Security Solutions. All commands via SMS. Standard carrier rates apply.</p>
+    <p style="margin-top: 8px; font-size: 0.8rem;"><i class="fas fa-mobile-alt"></i> Available for Android • Secure & Reliable</p>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toastMsg" style="position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#1e293b; color:white; padding:12px 28px; border-radius:60px; z-index:1000; backdrop-filter:blur(12px); font-weight:600; display:none; align-items:center; gap:10px; box-shadow:0 10px 25px rgba(0,0,0,0.2);"></div>
+
+<script>
+  // APK is located in /apk/ folder - ready for deployment
+  const APK_URL = './apk/app-debug.apk';
+  const downloadBtn = document.getElementById('downloadApkBtn');
+  const toastDiv = document.getElementById('toastMsg');
+
+  function showMessage(msg, isError = false) {
+    toastDiv.style.display = 'flex';
+    toastDiv.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${msg}`;
+    toastDiv.style.background = isError ? '#dc2626' : '#10b981';
+    setTimeout(() => { toastDiv.style.display = 'none'; }, 3000);
+  }
+
+  function downloadAPK() {
+    const link = document.createElement('a');
+    link.href = APK_URL;
+    link.download = 'app-debug.apk';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showMessage('✅ Download started! Vico Smart APK', false);
+  }
+
+  downloadBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    // Ripple & haptic feedback simulation
+    downloadBtn.style.transform = 'scale(0.97)';
+    setTimeout(() => { downloadBtn.style.transform = ''; }, 150);
+    downloadAPK();
+  });
+
+  // Reactive card clicks for app previews
+  const appCards = document.querySelectorAll('.app-card');
+  appCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const title = card.querySelector('h5').innerText;
+      showMessage(`📱 ${title} — tap GET APP to install`, false);
+    });
+  });
+
+  // Logo click animation & scroll to top
+  const logoDiv = document.getElementById('logoClick');
+  logoDiv.addEventListener('click', () => {
+    logoDiv.style.transform = 'scale(0.98)';
+    setTimeout(() => { logoDiv.style.transform = ''; }, 200);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showMessage('✨ Vico Smart — Ultimate Security', false);
+  });
+
+  // Support links interaction
+  const supportLinks = document.querySelectorAll('.support-link');
+  supportLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const text = link.innerText.trim();
+      showMessage(`📞 Contact support: ${text} — We'll respond promptly`, false);
+    });
+  });
+
+  // Icon card interaction
+  const iconCard = document.getElementById('iconCard');
+  iconCard.addEventListener('click', () => {
+    iconCard.style.transform = 'scale(0.98)';
+    setTimeout(() => { iconCard.style.transform = ''; }, 200);
+    showMessage('🎯 Vico Smart — Control your security with ease', false);
+  });
+
+  // Feature cards interactive
+  const features = document.querySelectorAll('.feature');
+  features.forEach(feature => {
+    feature.addEventListener('click', () => {
+      const title = feature.querySelector('h3').innerText;
+      showMessage(`✨ ${title} — available in Vico Smart`, false);
+    });
+  });
+
+  // Support card hover effect
+  const supportCard = document.getElementById('supportCard');
+  supportCard.addEventListener('click', () => {
+    showMessage('💬 Contact our team for assistance!', false);
+  });
+
+  // Check if APK exists (soft warning only in console, not disturbing user)
+  fetch(APK_URL, { method: 'HEAD', cache: 'no-cache' })
+    .then(resp => { if (!resp.ok) console.warn(`ℹ️ APK ready to be placed at ${APK_URL}`); })
+    .catch(() => console.warn(`ℹ️ Add app-debug.apk to /apk/ folder for download`));
+</script>
+</body>
+</html>
